@@ -30,5 +30,5 @@ function draw() {
   noStroke();
   fill('white');
   textAlign(RIGHT, BOTTOM);
-  text("Deze tekst is erg lang en wordt daarom op meerdere regels weergegeven.",0,0,350,150);
+  text("Deze tekst i erg lang en wordt daarom op meerdere regels weergegeven.",0,0,350,150);
 }
