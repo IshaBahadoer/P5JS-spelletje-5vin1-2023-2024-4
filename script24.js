@@ -38,21 +38,20 @@ function draw() {
   if (keyIsDown(83)) {
     yProoi += 5;
   }
-
+  
   xJager = constrain(xJager,0,width - 100);
   yJager = constrain(yJager,0,height - 100);
   xProoi = constrain(xProoi,0,width - 75);
   yProoi = constrain(yProoi,0,height - 50);
 
-   if (xJager >= xProoi-100 && xJager <= xProoi + 75 && yJager >= yProoi - 100 && yJager <= yProoi + 50) {
+  if (xJager >= xProoi-100 && xJager <= xProoi + 75 && yJager >= yProoi - 100 && yJager <= yProoi + 50) {
     fill('chartreuse');
     eindScherm();
   }
   else {
     fill('darkkhaki');
-
   }
-  rect(800,175,75,50);
+  rect(xProoi,yProoi,75,50);
   fill('moccasin');
   rect(xJager,yJager,100,100);   
 }
