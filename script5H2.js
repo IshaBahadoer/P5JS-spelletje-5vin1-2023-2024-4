@@ -13,7 +13,7 @@ function preload() {
 
 function setup() {
   canvas = createCanvas(900,600);
-  canvas.parent('');
+  canvas.parent();
   celGrootte = width / aantalKolommenRaster;
 }
 
