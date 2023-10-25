@@ -6,6 +6,7 @@ class Raster {
     this.aantalRijen = r;
     this.aantalKolommen = k;
     this.celGrootte = null;
+    this.oranjeRegel = r;
   }
 
   berekenCelGrootte() {
@@ -18,10 +19,22 @@ class Raster {
     stroke('grey');
     for (let rij = 0; rij < this.aantalRijen; rij++) {
       for (let kolom = 0; kolom < this.aantalKolommen; kolom++) {
+         if (rij === this.oranjeRegel - 3 || kolom === this.oranjeRegel - 12) {
+          fill ('orange');
+         } else(
+           noFill()
+         )
         rect(kolom * this.celGrootte, rij * this.celGrootte, this.celGrootte, this.celGrootte);
       }
     }
     pop();
+  }
+}
+
+class Appel {
+  constructor() {
+    this.x = 100; 
+    this.y = 100; 
   }
 }
 
@@ -103,7 +116,7 @@ class Vijand {
 
 function preload() {
   brug = loadImage("images/backgrounds/dame_op_brug_1800.jpg");
-}
+}  
 
 function setup() {
   canvas = createCanvas(900, 600);
@@ -111,6 +124,7 @@ function setup() {
   frameRate(10);
   textFont("Verdana");
   textSize(90);
+
 
   raster = new Raster(12, 18);
   raster.berekenCelGrootte();
