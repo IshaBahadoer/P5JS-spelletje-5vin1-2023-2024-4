@@ -19,11 +19,11 @@ class Raster {
     stroke('grey');
     for (let rij = 0; rij < this.aantalRijen; rij++) {
       for (let kolom = 0; kolom < this.aantalKolommen; kolom++) {
-         if (rij === this.oranjeRegel - 3 || kolom === this.oranjeRegel - 12) {
-          fill ('orange');
-         } else(
-           noFill()
-         )
+        if (rij === this.oranjeRegel - 3 || kolom === this.oranjeRegel - 12) {
+          fill('orange');
+        } else {
+          noFill();
+        }
         rect(kolom * this.celGrootte, rij * this.celGrootte, this.celGrootte, this.celGrootte);
       }
     }
@@ -33,8 +33,8 @@ class Raster {
 
 class Appel {
   constructor() {
-    this.x = 100; 
-    this.y = 100; 
+    this.x = 100;
+    this.y = 100;
   }
 }
 
@@ -116,7 +116,7 @@ class Vijand {
 
 function preload() {
   brug = loadImage("images/backgrounds/dame_op_brug_1800.jpg");
-}  
+}
 
 function setup() {
   canvas = createCanvas(900, 600);
@@ -124,7 +124,6 @@ function setup() {
   frameRate(10);
   textFont("Verdana");
   textSize(90);
-
 
   raster = new Raster(12, 18);
   raster.berekenCelGrootte();
@@ -160,15 +159,27 @@ function draw() {
   bob.toon();
 
   if (eve.wordtGeraakt(alice) || eve.wordtGeraakt(bob)) {
-    noLoop();
+    verlorenScherm();
   }
 
   if (eve.gehaald) {
-    background('green');
-    fill('white');
-    text("Je hebt gewonnen!", 30, 300);
-    noLoop();
+    gewonnenScherm();
   }
+}
+
+function verlorenScherm() {
+  background('red');
+  fill('white');
+  textSize(40);  // Pas de tekstgrootte aan
+  text("Je hebt verloren, probeer het opnieuw!", 175 , 300);
+  noLoop();
+}
+
+function gewonnenScherm() {
+  background('green');
+  fill('white');
+  text("Je hebt gewonnen!", 30, 300);
+  noLoop();
 }
 
 function restartGame() {
