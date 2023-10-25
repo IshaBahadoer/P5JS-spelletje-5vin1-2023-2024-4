@@ -44,11 +44,24 @@ class Bom {
     this.x = x;
     this.y = y;
     this.exploded = false;
+    this.beweegRichting = 1; // 1 voor omlaag, -1 voor omhoog
   }
 
   explode() {
     // Voeg hier code toe om de explosie-animatie uit te voeren, bijvoorbeeld een rode kleur of een explosieafbeelding.
     this.exploded = true;
+  }
+
+  beweeg() {
+    if (!this.exploded) {
+      // Verander de beweging van de bom in de richting
+      this.y += this.beweegRichting * raster.celGrootte;
+
+      // Controleer of de bom de onder- of bovenkant van het raster bereikt
+      if (this.y >= canvas.height - raster.celGrootte || this.y <= 0) {
+        this.beweegRichting *= -1; // Verander de richting
+      }
+    }
   }
 
   toon() {
@@ -172,6 +185,7 @@ function draw() {
 
   // Beweeg en toon de bommen
   for (let bom of bommen) {
+    bom.beweeg(); // Voeg deze regel toe om de bommen te laten bewegen
     bom.toon();
   }
 
