@@ -1,5 +1,6 @@
 let restartButton;
-let brug, canvas, raster, eve, alice, bob;
+let brug, canvas, raster, eve, alice, bob, bommen;
+const numBommen = 5;
 
 class Raster {
   constructor(r, k) {
@@ -39,12 +40,23 @@ class Appel {
 }
 
 class Bom {
-  constructor(x, y, s) {
+  constructor(x, y) {
     this.x = x;
     this.y = y;
-    this.s = s;
-    this.frameNummer = 0;
-    numBombs = 5;
+    this.exploded = false;
+  }
+
+  explode() {
+    // Voeg hier code toe om de explosie-animatie uit te voeren, bijvoorbeeld een rode kleur of een explosieafbeelding.
+    this.exploded = true;
+  }
+
+  toon() {
+    if (!this.exploded) {
+      // Toon hier de bom, bijvoorbeeld een zwarte cirkel.
+      fill('black');
+      ellipse(this.x + raster.celGrootte / 2, this.y + raster.celGrootte / 2, raster.celGrootte, raster.celGrootte);
+    }
   }
 }
 
@@ -143,6 +155,9 @@ function setup() {
   bob.stapGrootte = 1 * eve.stapGrootte;
   bob.sprite = loadImage("images/sprites/Bob100px/Bob.png");
 
+  bommen = [];
+  genereerBommen();
+
   restartButton = createButton('Restart');
   restartButton.position(10, 10);
   restartButton.mousePressed(restartGame);
@@ -154,12 +169,21 @@ function draw() {
   eve.beweeg();
   alice.beweeg();
   bob.beweeg();
+
+  // Beweeg en toon de bommen
+  for (let bom of bommen) {
+    bom.toon();
+  }
+
   eve.toon();
   alice.toon();
   bob.toon();
 
-  if (eve.wordtGeraakt(alice) || eve.wordtGeraakt(bob)) {
-    verlorenScherm();
+  // Controleer of de speler de bom raakt
+  for (let bom of bommen) {
+    if (eve.wordtGeraakt(bom) && !bom.exploded) {
+      verlorenScherm();
+    }
   }
 
   if (eve.gehaald) {
@@ -170,23 +194,31 @@ function draw() {
 function verlorenScherm() {
   background('red');
   fill('white');
-  textSize(40);  // Pas de tekstgrootte aan
-  text("Je hebt verloren, probeer het opnieuw!", 175 , 300);
+  textSize(40);
+  text("Je hebt verloren, probeer het opnieuw!", 175, 300);
   noLoop();
 }
 
 function gewonnenScherm() {
   background('green');
   fill('white');
-  text("Je hebt gewonnen!", 30, 300);
+  text("Je hebt gewonnen!", 175, 300);
   noLoop();
 }
 
 function restartGame() {
-  loop();  // Hervat de game loop
+  loop();
   eve.x = 400;
   eve.y = 300;
   eve.gehaald = false;
+  bommen = [];
+  genereerBommen();
+}
+
+function genereerBommen() {
+  for (let i = 0; i < numBommen; i++) {
+    bommen.push(new Bom(floor(random(raster.aantalKolommen)) * raster.celGrootte, floor(random(raster.aantalRijen)) * raster.celGrootte));
+  }
 }
 
 function keyPressed() {
