@@ -20,7 +20,7 @@ class Raster {
     stroke('grey');
     for (let rij = 0; rij < this.aantalRijen; rij++) {
       for (let kolom = 0; kolom < this.aantalKolommen; kolom++) {
-        if (rij === this.oranjeRegel - 3 || kolom === this.oranjeRegel - 12) {
+        if (rij === this.oranjeRegel - 1 || kolom === this.oranjeRegel - 10) {
           fill('orange');
         } else {
           noFill();
@@ -32,25 +32,24 @@ class Raster {
   }
 }
 
-class Appel {
-  constructor() {
-    this.x = 100;
-    this.y = 100;
-  }
+var appel = {
+    x = 100,
+    y = 100 
+    
+}
+class Bom {
+constructor(x, y) {
+  this.x = x;
+  this.y = y;
+  this.exploded = false;
+  this.beweegRichting = 1; // 1 voor omlaag, -1 voor omhoog
 }
 
-class Bom {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-    this.exploded = false;
-    this.beweegRichting = 1; // 1 voor omlaag, -1 voor omhoog
-  }
+explode() {
+  // Voeg hier code toe om de explosie-animatie uit te voeren, bijvoorbeeld een rode kleur of een explosieafbeelding.
+  this.exploded = true;
+}
 
-  explode() {
-    // Voeg hier code toe om de explosie-animatie uit te voeren, bijvoorbeeld een rode kleur of een explosieafbeelding.
-    this.exploded = true;
-  }
 
   beweeg() {
     if (!this.exploded) {
@@ -208,7 +207,7 @@ function draw() {
 function verlorenScherm() {
   background('red');
   fill('white');
-  textSize(40);
+  textSize(30);
   text("Je hebt verloren, probeer het opnieuw!", 175, 300);
   noLoop();
 }
@@ -216,6 +215,7 @@ function verlorenScherm() {
 function gewonnenScherm() {
   background('green');
   fill('white');
+  textSize(30);
   text("Je hebt gewonnen!", 175, 300);
   noLoop();
 }
@@ -231,7 +231,11 @@ function restartGame() {
 
 function genereerBommen() {
   for (let i = 0; i < numBommen; i++) {
-    bommen.push(new Bom(floor(random(raster.aantalKolommen)) * raster.celGrootte, floor(random(raster.aantalRijen)) * raster.celGrootte));
+    // Genereer een willekeurige rij en een kolom rechts van het midden
+    const rij = floor(random(raster.aantalRijen));
+    const kolom = floor(random(raster.aantalKolommen / 2, raster.aantalKolommen));
+
+    bommen.push(new Bom(kolom * raster.celGrootte, rij * raster.celGrootte));
   }
 }
 
