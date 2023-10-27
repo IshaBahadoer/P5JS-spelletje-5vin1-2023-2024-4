@@ -1,5 +1,5 @@
 let restartButton;
-let brug, canvas, raster, eve, alice, bob, bommen;
+let brug, canvas, raster, eve, alice, bob, bommen, appel;
 const numBommen = 5;
 
 class Raster {
@@ -20,7 +20,7 @@ class Raster {
     stroke('grey');
     for (let rij = 0; rij < this.aantalRijen; rij++) {
       for (let kolom = 0; kolom < this.aantalKolommen; kolom++) {
-        if (rij === this.oranjeRegel - 1 || kolom === this.oranjeRegel - 10) {
+        if (rij === this.oranjeRegel - 3 || kolom === this.oranjeRegel - 12) {
           fill('orange');
         } else {
           noFill();
@@ -32,35 +32,19 @@ class Raster {
   }
 }
 
-var appel = {
-    x = 100,
-    y = 100 
-    
-}
 class Bom {
-constructor(x, y) {
-  this.x = x;
-  this.y = y;
-  this.exploded = false;
-  this.beweegRichting = 1; // 1 voor omlaag, -1 voor omhoog
-}
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.exploded = false;
+    this.beweegRichting = 1; // 1 voor naar beneden, -1 voor naar boven
+    this.beweegStap = raster.celGrootte; // De stapgrootte van de verticale beweging
+    this.beweegSnelheid = random(1, 3); // Willekeurige snelheid tussen 1 en 3
+  }
 
-explode() {
-  // Voeg hier code toe om de explosie-animatie uit te voeren, bijvoorbeeld een rode kleur of een explosieafbeelding.
-  this.exploded = true;
-}
-
-
-  beweeg() {
-    if (!this.exploded) {
-      // Verander de beweging van de bom in de richting
-      this.y += this.beweegRichting * raster.celGrootte;
-
-      // Controleer of de bom de onder- of bovenkant van het raster bereikt
-      if (this.y >= canvas.height - raster.celGrootte || this.y <= 0) {
-        this.beweegRichting *= -1; // Verander de richting
-      }
-    }
+  explode() {
+    // Voeg hier code toe om de explosie-animatie uit te voeren, bijvoorbeeld een rode kleur of een explosieafbeelding.
+    this.exploded = true;
   }
 
   toon() {
@@ -68,6 +52,15 @@ explode() {
       // Toon hier de bom, bijvoorbeeld een zwarte cirkel.
       fill('black');
       ellipse(this.x + raster.celGrootte / 2, this.y + raster.celGrootte / 2, raster.celGrootte, raster.celGrootte);
+    }
+  }
+
+  beweegVerticaal() {
+    this.y += this.beweegRichting * this.beweegStap * this.beweegSnelheid;
+
+    // Controleer of de bom de randen van het raster raakt
+    if (this.y >= canvas.height - raster.celGrootte || this.y <= 0) {
+      this.beweegRichting *= -1; // Keer de beweegrichting om als de rand wordt bereikt
     }
   }
 }
@@ -138,6 +131,18 @@ class Vijand {
   }
 }
 
+class Appel {
+  constructor() {
+    this.x = floor(random(raster.aantalKolommen)) * raster.celGrootte;
+    this.y = floor(random(raster.aantalRijen)) * raster.celGrootte;
+    this.picture = loadImage("images/sprites/appel_1.png");
+  }
+
+  toon() {
+    image(this.picture, this.x, this.y, raster.celGrootte, raster.celGrootte);
+  }
+}
+
 function preload() {
   brug = loadImage("images/backgrounds/dame_op_brug_1800.jpg");
 }
@@ -170,6 +175,9 @@ function setup() {
   bommen = [];
   genereerBommen();
 
+  // Maak een appel aan
+  appel = new Appel();
+
   restartButton = createButton('Restart');
   restartButton.position(10, 10);
   restartButton.mousePressed(restartGame);
@@ -184,13 +192,16 @@ function draw() {
 
   // Beweeg en toon de bommen
   for (let bom of bommen) {
-    bom.beweeg(); // Voeg deze regel toe om de bommen te laten bewegen
+    bom.beweegVerticaal(); // Laat de bom verticaal bewegen
     bom.toon();
   }
 
   eve.toon();
   alice.toon();
   bob.toon();
+
+  // Toon de appel
+  appel.toon();
 
   // Controleer of de speler de bom raakt
   for (let bom of bommen) {
@@ -207,7 +218,7 @@ function draw() {
 function verlorenScherm() {
   background('red');
   fill('white');
-  textSize(30);
+  textSize(40);
   text("Je hebt verloren, probeer het opnieuw!", 175, 300);
   noLoop();
 }
@@ -215,7 +226,6 @@ function verlorenScherm() {
 function gewonnenScherm() {
   background('green');
   fill('white');
-  textSize(30);
   text("Je hebt gewonnen!", 175, 300);
   noLoop();
 }
@@ -231,16 +241,8 @@ function restartGame() {
 
 function genereerBommen() {
   for (let i = 0; i < numBommen; i++) {
-    // Genereer een willekeurige rij en een kolom rechts van het midden
-    const rij = floor(random(raster.aantalRijen));
-    const kolom = floor(random(raster.aantalKolommen / 2, raster.aantalKolommen));
-
-    bommen.push(new Bom(kolom * raster.celGrootte, rij * raster.celGrootte));
-  }
-}
-
-function keyPressed() {
-  if (keyCode === 32) {  // Spatiebalk
-    restartGame();
+    const x = floor(random(raster.aantalKolommen / 2, raster.aantalKolommen)) * raster.celGrootte;
+    const y = floor(random(raster.aantalRijen)) * raster.celGrootte;
+    bommen.push(new Bom(x, y));
   }
 }
