@@ -105,6 +105,14 @@ class Jos {
     return this.x === vijand.x && this.y === vijand.y;
   }
 
+  eetAppel(appel) {
+    // Controleer of Jos de appel heeft opgegeten
+    if (dist(this.x, this.y, appel.x, appel.y) < raster.celGrootte / 2) {
+      levens++; // Verhoog het aantal levens
+      appel.verplaats(); // Verplaats de appel naar een nieuwe willekeurige locatie
+    }
+  }
+
   toon() {
     image(this.animatie[this.frameNummer], this.x, this.y, raster.celGrootte, raster.celGrootte);
   }
@@ -140,6 +148,11 @@ class Appel {
 
   toon() {
     image(this.picture, this.x, this.y, raster.celGrootte, raster.celGrootte);
+  }
+
+  verplaats() {
+    this.x = floor(random(raster.aantalKolommen)) * raster.celGrootte;
+    this.y = floor(random(raster.aantalRijen)) * raster.celGrootte;
   }
 }
 
@@ -216,6 +229,9 @@ function draw() {
     }
   }
 
+  // Controleer of Jos de appel heeft opgegeten
+  eve.eetAppel(appel);
+
   if (eve.gehaald) {
     gewonnenScherm();
   }
@@ -244,6 +260,7 @@ function restartGame() {
   eve.gehaald = false;
   bommen = [];
   genereerBommen();
+  appel.verplaats(); // Verplaats de appel naar een nieuwe willekeurige locatie
 }
 
 function genereerBommen() {
