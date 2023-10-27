@@ -1,6 +1,7 @@
 let restartButton;
 let brug, canvas, raster, eve, alice, bob, bommen, appel;
 const numBommen = 5;
+let levens = 3; // Voeg levens toe
 
 class Raster {
   constructor(r, k) {
@@ -189,6 +190,12 @@ function draw() {
   alice.beweeg();
   bob.beweeg();
 
+  // Teken levens linksboven op het scherm
+  for (let i = 0; i < levens; i++) {
+    fill('red');
+    ellipse(40 + i * 40, 40, 30, 30);
+  }
+
   // Beweeg en toon de bommen
   for (let bom of bommen) {
     bom.beweegVerticaal(); // Laat de bom verticaal bewegen
@@ -215,11 +222,12 @@ function draw() {
 }
 
 function verlorenScherm() {
-  background('red');
-  fill('white');
-  textSize(40);
-  text("Je hebt verloren, probeer het opnieuw!", 175, 300);
-  noLoop();
+  levens--;
+  if (levens <= 0) {
+    eindigSpel();
+  } else {
+    restartGame();
+  }
 }
 
 function gewonnenScherm() {
@@ -252,4 +260,10 @@ function keyPressed() {
   }
 }
 
-
+function eindigSpel() {
+  background('red');
+  fill('white');
+  textSize(40);
+  text("Game Over", 250, 300);
+  noLoop();
+}
