@@ -39,7 +39,6 @@ class Bom {
     this.exploded = false;
     this.beweegRichting = 1; // 1 voor naar beneden, -1 voor naar boven
     this.beweegStap = raster.celGrootte; // De stapgrootte van de verticale beweging
-    this.beweegSnelheid = random(1, 3); // Willekeurige snelheid tussen 1 en 3
   }
 
   explode() {
@@ -56,7 +55,7 @@ class Bom {
   }
 
   beweegVerticaal() {
-    this.y += this.beweegRichting * this.beweegStap * this.beweegSnelheid;
+    this.y += this.beweegRichting * this.beweegStap;
 
     // Controleer of de bom de randen van het raster raakt
     if (this.y >= canvas.height - raster.celGrootte || this.y <= 0) {
@@ -246,3 +245,11 @@ function genereerBommen() {
     bommen.push(new Bom(x, y));
   }
 }
+
+function keyPressed() {
+  if (keyCode === 32) {  // Spatiebalk
+    restartGame();
+  }
+}
+
+
