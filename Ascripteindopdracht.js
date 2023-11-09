@@ -38,18 +38,16 @@ class Bom {
     this.x = x;
     this.y = y;
     this.exploded = false;
-    this.beweegRichting = 1; // 1 voor naar beneden, -1 voor naar boven
-    this.beweegStap = raster.celGrootte; // De stapgrootte van de verticale beweging
+    this.beweegRichting = 1;
+    this.beweegStap = raster.celGrootte;
   }
 
   explode() {
-    // Voeg hier code toe om de explosie-animatie uit te voeren, bijvoorbeeld een rode kleur of een explosieafbeelding.
     this.exploded = true;
   }
 
   toon() {
     if (!this.exploded) {
-      // Toon hier de bom, bijvoorbeeld een zwarte cirkel.
       fill('black');
       ellipse(this.x + raster.celGrootte / 2, this.y + raster.celGrootte / 2, raster.celGrootte, raster.celGrootte);
     }
@@ -58,9 +56,8 @@ class Bom {
   beweegVerticaal() {
     this.y += this.beweegRichting * this.beweegStap;
 
-    // Controleer of de bom de randen van het raster raakt
     if (this.y >= canvas.height - raster.celGrootte || this.y <= 0) {
-      this.beweegRichting *= -1; // Keer de beweegrichting om als de rand wordt bereikt
+      this.beweegRichting *= -1;
     }
   }
 }
@@ -102,14 +99,15 @@ class Jos {
   }
 
   wordtGeraakt(vijand) {
-    return this.x === vijand.x && this.y === vijand.y;
+    return (this.x === vijand.x && this.y === vijand.y) ||
+           (this.x + raster.celGrootte > vijand.x && this.x < vijand.x + raster.celGrootte &&
+            this.y + raster.celGrootte > vijand.y && this.y < vijand.y + raster.celGrootte);
   }
 
   eetAppel(appel) {
-    // Controleer of Jos de appel heeft opgegeten
     if (dist(this.x, this.y, appel.x, appel.y) < raster.celGrootte / 2) {
-      levens++; // Verhoog het aantal levens
-      appel.verplaats(); // Verplaats de appel naar een nieuwe willekeurige locatie
+      levens++;
+      appel.verplaats();
     }
   }
 
@@ -188,7 +186,6 @@ function setup() {
   bommen = [];
   genereerBommen();
 
-  // Maak een appel aan
   appel = new Appel();
 
   restartButton = createButton('Restart');
@@ -203,15 +200,13 @@ function draw() {
   alice.beweeg();
   bob.beweeg();
 
-  // Teken levens linksboven op het scherm
   for (let i = 0; i < levens; i++) {
     fill('red');
     ellipse(40 + i * 40, 40, 30, 30);
   }
 
-  // Beweeg en toon de bommen
   for (let bom of bommen) {
-    bom.beweegVerticaal(); // Laat de bom verticaal bewegen
+    bom.beweegVerticaal();
     bom.toon();
   }
 
@@ -219,17 +214,12 @@ function draw() {
   alice.toon();
   bob.toon();
 
-  // Toon de appel
   appel.toon();
 
-  // Controleer of de speler de bom raakt
-  for (let bom of bommen) {
-    if (eve.wordtGeraakt(bom) && !bom.exploded) {
-      verlorenScherm();
-    }
+  if (eve.wordtGeraakt(alice) || eve.wordtGeraakt(bob)) {
+    verlorenScherm();
   }
 
-  // Controleer of Jos de appel heeft opgegeten
   eve.eetAppel(appel);
 
   if (eve.gehaald) {
@@ -260,7 +250,7 @@ function restartGame() {
   eve.gehaald = false;
   bommen = [];
   genereerBommen();
-  appel.verplaats(); // Verplaats de appel naar een nieuwe willekeurige locatie
+  appel.verplaats();
 }
 
 function genereerBommen() {
@@ -272,7 +262,7 @@ function genereerBommen() {
 }
 
 function keyPressed() {
-  if (keyCode === 32) {  // Spatiebalk
+  if (keyCode === 32) {  
     restartGame();
   }
 }
