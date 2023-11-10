@@ -6,9 +6,9 @@ let levens = 3; // Voeg levens toe
 class Raster {
   constructor(r, k) {
     this.aantalRijen = r;
-    this.aantalKolommen = k;
+    this.aantalKolommen = k; 
     this.celGrootte = null;
-    this.oranjeRegel = r;
+    this.oranjeRegel = r; // Voeg oranjeRegel toe
   }
 
   berekenCelGrootte() {
@@ -19,10 +19,10 @@ class Raster {
     push();
     noFill();
     stroke('grey');
-    for (let rij = 0; rij < this.aantalRijen; rij++) {
-      for (let kolom = 0; kolom < this.aantalKolommen; kolom++) {
+    for (let rij = 0; rij < this.aantalRijen; rij++) { // Voeg rij toe
+      for (let kolom = 0; kolom < this.aantalKolommen; kolom++) { // Voeg kolom toe
         if (rij === this.oranjeRegel - 3 || kolom === this.oranjeRegel - 12) {
-          fill('orange');
+          fill('orange'); // Voeg fill toe
         } else {
           noFill();
         }
@@ -145,9 +145,9 @@ class Vijand {
 
 class Appel {
   constructor() {
-    this.x = floor(random(raster.aantalKolommen)) * raster.celGrootte;
-    this.y = floor(random(raster.aantalRijen)) * raster.celGrootte;
-    this.picture = loadImage("images/sprites/appel_1.png");
+    this.x = floor(random(raster.aantalKolommen)) * raster.celGrootte; // Genereer een willekeurige x-coordinaat
+    this.y = floor(random(raster.aantalRijen)) * raster.celGrootte; // Genereer een willekeurige y-coordinaat
+    this.picture = loadImage("images/sprites/appel_1.png"); // Voegt de appel afbeelding toe
   }
 
   toon() {
@@ -195,9 +195,9 @@ function setup() {
   // Maak een appel aan
   appel = new Appel();
 
-  restartButton = createButton('Restart');
-  restartButton.position(10, 10);
-  restartButton.mousePressed(restartGame);
+  restartButton = createButton('Restart'); // Maakt een knop om het spel opnieuw te starten
+  restartButton.position(10, 10); // Positioneert de knop op de canvas
+  restartButton.mousePressed(restartGame); // Voegt een eventlistener toe aan de knop om te controleren of de gebr
 }
 
 function draw() {
@@ -242,7 +242,7 @@ function draw() {
   eve.eetAppel(appel);
 
   if (eve.gehaald) {
-    gewonnenScherm();
+    gewonnenScherm(); // Toon de gewonnen scherm
   }
 }
 
@@ -269,6 +269,7 @@ function verlorenScherm() {
  // }
 }
 
+ // Functie om de gewonnen scherm te laten zien
 function gewonnenScherm() {
   background('green');
   fill('white');
@@ -276,6 +277,7 @@ function gewonnenScherm() {
   noLoop();
 }
 
+// Functie om de speler opnieuw te starten
 function restartGame() {
   loop();
   eve.x = 400;
@@ -288,11 +290,12 @@ function restartGame() {
   // Verplaats de appel naar een nieuwe willekeurige locatie
 }
 
+// Functie bommen genereeren 
 function genereerBommen() {
   for (let i = 0; i < numBommen; i++) {
-    const x = floor(random(raster.aantalKolommen / 2, raster.aantalKolommen)) * raster.celGrootte;
-    const y = floor(random(raster.aantalRijen)) * raster.celGrootte;
-    bommen.push(new Bom(x, y));
+    const x = floor(random(raster.aantalKolommen / 2, raster.aantalKolommen)) * raster.celGrootte; // Genereer een willekeurige x-positie
+    const y = floor(random(raster.aantalRijen)) * raster.celGrootte; // Genereer een willekeurige y-positie
+    bommen.push(new Bom(x, y)); // Maak een nieuwe bom aan
   }
 }
 
@@ -302,6 +305,7 @@ function keyPressed() {
   }
 }
 
+// Functie om het spel te eindigen 
 function eindigSpel() {
   background('red');
   fill('white');
