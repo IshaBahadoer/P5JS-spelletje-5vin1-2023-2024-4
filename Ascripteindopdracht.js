@@ -207,10 +207,10 @@ function draw() {
   alice.beweeg();
   bob.beweeg();
 
-  // Teken levens linksboven op het scherm
+  // Teken levens linksboven op het scherm als hartjes
   for (let i = 0; i < levens; i++) {
     fill('red');
-    ellipse(40 + i * 40, 40, 30, 30);
+    drawHeart(40 + i * 40, 40, 30);
   }
 
   // Controleer of de speler wordt geraakt door een vijand
@@ -245,6 +245,20 @@ function draw() {
     gewonnenScherm();
   }
 }
+
+// Functie om een hartje te tekenen
+
+
+// Functie om een groter gevuld hartje te tekenen
+  function drawHeart(x, y, size) {
+    const heartSize = size * 1.2; // Maak het hartje wat smaller
+    beginShape();
+    vertex(x, y + heartSize / 2);
+    bezierVertex(x + heartSize / 2, y - heartSize / 4, x + heartSize, y + heartSize / 2, x, y + heartSize);
+    bezierVertex(x - heartSize, y + heartSize / 2, x - heartSize / 2, y - heartSize / 4, x, y + heartSize / 2);
+    endShape(CLOSE);
+  }
+
 
 function verlorenScherm() {
   levens--;
