@@ -213,10 +213,7 @@ function draw() {
     drawHeart(40 + i * 40, 40, 30);
   }
 
-  // Controleer of de speler wordt geraakt door een vijand
-  if (eve.wordtGeraaktDoorVijand(alice) || eve.wordtGeraaktDoorVijand(bob)) {
-    verlorenScherm();
-  }
+
 
   // Beweeg en toon de bommen
   for (let bom of bommen) {
@@ -237,7 +234,10 @@ function draw() {
       verlorenScherm();
     }
   }
-
+  // Controleer of de speler wordt geraakt door een vijand
+  if (eve.wordtGeraaktDoorVijand(alice) || eve.wordtGeraaktDoorVijand(bob)) {
+    verlorenScherm();
+  }
   // Controleer of Jos de appel heeft opgegeten
   eve.eetAppel(appel);
 
@@ -264,9 +264,9 @@ function verlorenScherm() {
   levens--;
   if (levens <= 0) {
     eindigSpel();
-  } else {
-    restartGame();
-  }
+  } //else {
+   // restartGame();
+ // }
 }
 
 function gewonnenScherm() {
@@ -283,7 +283,9 @@ function restartGame() {
   eve.gehaald = false;
   bommen = [];
   genereerBommen();
-  appel.verplaats(); // Verplaats de appel naar een nieuwe willekeurige locatie
+  appel.verplaats();
+  levens = 3; // Voeg levens toe
+  // Verplaats de appel naar een nieuwe willekeurige locatie
 }
 
 function genereerBommen() {
